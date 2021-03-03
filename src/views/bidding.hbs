@@ -1,0 +1,32 @@
+<h1 style="text-align: center;">Licitações</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Pregão</th>
+      <th scope="col">Tipo</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Data Abertura</th>
+			<th scope="col">Data Fechamento</th>
+			<th scope="col">Funções</th>
+    </tr>
+  </thead>
+  <tbody>
+		{{#each biddings}}
+			<tr>
+				<th scope="row">{{this.numPregao}}</th>
+				<td>{{this.tipo}}</td>
+				<td>{{this.descricao}}</td>
+				<td>{{this.dataAbertura}}</td>
+				<td>{{this.dataFechamento}}</td>
+				<td>
+					<div class="btn-group">
+						<button class="btn btn-success">Alterar</button>
+						&nbsp;
+						<button class="btn btn-danger">Remover</button>
+					</div>
+				</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>
