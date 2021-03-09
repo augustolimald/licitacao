@@ -1,4 +1,139 @@
+<script>
+	async function handleRegistrationButton() {
+		const data = {
+			numPregao: prompt('Informe o número do pregão'),
+			tipo: prompt('Informe o tipo'),
+			descricao: prompt('Informe a descrição'),
+			dataAbertura: convertStringToDate(prompt('Informe a data de abertura')),
+			dataFechamento: convertStringToDate(prompt('Informe a data de Fechamento')),
+		};
+
+		const response = await fetch(`/biddings`, { 
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+    	},
+			body: JSON.stringify(data),
+		});
+
+		if (response.status !== 201) {
+			alert('Ocorreu um erro');
+		} else {
+			alert('Sucesso!');
+
+			const data = await response.json();
+
+			const row = document.createElement('tr');
+			row.id = `row:${data.numPregao}`;
+			
+			const idRow = document.createElement('th');
+			idRow.setAttribute('scope', 'row');
+			idRow.innerHTML = data.numPregao;
+			row.appendChild(idRow);
+
+			const tipoRow = document.createElement('td');
+			tipoRow.innerHTML = data.tipo;
+			row.appendChild(tipoRow);
+
+			const descricaoRow = document.createElement('td');
+			descricaoRow.innerHTML = data.descricao;
+			row.appendChild(descricaoRow);
+
+			const dataAberturaRow = document.createElement('td');
+			dataAberturaRow.innerHTML = convertDateToString(data.dataAbertura);
+			row.appendChild(dataAberturaRow);
+
+			const dataFechamentoRow = document.createElement('td');
+			dataFechamentoRow.innerHTML = convertDateToString(data.dataFechamento);
+			row.appendChild(dataFechamentoRow);
+
+			const td = document.createElement('td');
+			const btnGroup = document.createElement('btn-group');
+			
+			const btnUpdate = document.createElement('button');
+			btnUpdate.className = 'btn btn-success';
+			btnUpdate.onclick = () => handleUpdateButton(data.numPregao);
+			btnUpdate.innerHTML = 'Alterar';
+			btnGroup.appendChild(btnUpdate);
+
+			const btnDelete = document.createElement('button');
+			btnDelete.className = 'btn btn-danger';
+			btnDelete.onclick = () => handleDeleteButton(data.numPregao);
+			btnDelete.innerHTML = 'Remover';
+			btnGroup.appendChild(btnDelete);
+			
+			td.appendChild(btnGroup);
+			row.appendChild(td);
+
+			document.getElementById('biddingBody').appendChild(row);
+		}
+	}
+
+	function convertStringToDate(str) {
+		const [day, month, year] = str.split('/');
+		return `${year}-${month}-${day}`;
+	}
+
+	function convertDateToString(str) {
+		const [year, month, day] = str.split('-');
+		return `${day}/${month}/${year}`;
+	}
+
+	async function handleUpdateButton(numPregao) {
+		const row = document.getElementById(`row:${numPregao}`);
+
+		const data = {
+			tipo: prompt('Informe o tipo', row.children[1].innerHTML),
+			descricao: prompt('Informe a descrição', row.children[2].innerHTML),
+			dataAbertura: convertStringToDate(prompt('Informe a data de abertura', row.children[3].innerHTML)),
+			dataFechamento: convertStringToDate(prompt('Informe a data de Fechamento', row.children[4].innerHTML)),
+		};
+
+		const response = await fetch(`/biddings/${numPregao}`, { 
+			method: 'PUT',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+    	},
+			body: JSON.stringify(data),
+		});
+
+		if (response.status === 400) {
+			alert('Ocorreu um erro');
+		} else {
+			alert('Sucesso!');
+
+			row.children[1].innerHTML = data.tipo;
+			row.children[2].innerHTML = data.descricao;
+			row.children[3].innerHTML = new Date(data.dataAbertura).toLocaleDateString();
+			row.children[4].innerHTML = new Date(data.dataFechamento).toLocaleDateString();
+		}
+	}
+
+	async function handleDeleteButton(numPregao) {
+		if (!confirm('Tem certeza disso?')) {
+			return;
+		}
+
+		const response = await fetch(`/biddings/${numPregao}`, { method: 'DELETE' });
+		if (response.status !== 204) {
+			alert('Ocorreu um erro');
+		} else {
+			alert('Sucesso!');
+			document.getElementById(`row:${numPregao}`).remove();
+		}
+	}
+</script>
+
+<br>
 <h1 style="text-align: center;">Licitações</h1>
+<br>
+
+<div style="width: 100%; text-align: right">
+	<button onclick="handleRegistrationButton()" class="btn btn-primary">Adicionar</button>
+</div>
+<br>
 
 <table class="table">
   <thead>
@@ -11,9 +146,9 @@
 			<th scope="col">Funções</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="biddingBody">
 		{{#each biddings}}
-			<tr>
+			<tr id="row:{{this.numPregao}}">
 				<th scope="row">{{this.numPregao}}</th>
 				<td>{{this.tipo}}</td>
 				<td>{{this.descricao}}</td>
@@ -21,9 +156,9 @@
 				<td>{{this.dataFechamento}}</td>
 				<td>
 					<div class="btn-group">
-						<button class="btn btn-success">Alterar</button>
+						<button onclick="handleUpdateButton({{this.numPregao}})" class="btn btn-success">Alterar</button>
 						&nbsp;
-						<button class="btn btn-danger">Remover</button>
+						<button onclick="handleDeleteButton({{this.numPregao}})" class="btn btn-danger">Remover</button>
 					</div>
 				</td>
 			</tr>

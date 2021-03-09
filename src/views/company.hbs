@@ -1,40 +1,119 @@
 <script>
-	function handleUpdateButton(id_empresa) {
-		console.log({
-			body: JSON.stringify({
-				cnpj: '09876543210987',//prompt('Informe o cnpj'),
-				razaoSocial: 'MINIMO EIRELLI', //prompt('Informe a razao social'),
-				nomeFantasia: 'Minimo Serviços',//prompt('Informe o nome fantasia'),
-				site: 'www.minimo.com.br', //prompt('Informe o site'),
-				email: 'empresa.minimo@gmail.com', //prompt('Informe o email'),
-			})
+	async function handleRegistrationButton() {
+		const data = {
+			cnpj: '34732843284783',//prompt('Informe o cnpj'),
+			razaoSocial: 'Sou uma razao social', //prompt('Informe a razao social'),
+			nomeFantasia: 'Sou um nome', //prompt('Informe o nome fantasia'),
+			site: 'www.souumsite.com.br', //prompt('Informe o site'),
+			email: 'souumemail@mail.com' //prompt('Informe o email')
+		};
+
+		const response = await fetch(`/companies`, { 
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+    	},
+			body: JSON.stringify(data),
 		});
 
-		const response = fetch(`/companies/${id_empresa}`, { 
+		if (response.status !== 201) {
+			alert('Ocorreu um erro');
+		} else {
+			alert('Sucesso!');
+
+			const data = await response.json();
+
+			const row = document.createElement('tr');
+			row.id = `row:${data.idEmpresa}`;
+			
+			const idRow = document.createElement('th');
+			idRow.setAttribute('scope', 'row');
+			idRow.innerHTML = data.idEmpresa;
+			row.appendChild(idRow);
+
+			const cnpjRow = document.createElement('td');
+			cnpjRow.innerHTML = data.cnpj;
+			row.appendChild(cnpjRow);
+
+			const razaoSocialRow = document.createElement('td');
+			razaoSocialRow.innerHTML = data.razaoSocial;
+			row.appendChild(razaoSocialRow);
+
+			const nomeFantasiaRow = document.createElement('td');
+			nomeFantasiaRow.innerHTML = data.nomeFantasia;
+			row.appendChild(nomeFantasiaRow);
+
+			const siteRow = document.createElement('td');
+			siteRow.innerHTML = data.site;
+			row.appendChild(siteRow);
+
+			const emailRow = document.createElement('td');
+			emailRow.innerHTML = data.email;
+			row.appendChild(emailRow);
+
+			const td = document.createElement('td');
+			const btnGroup = document.createElement('btn-group');
+			
+			const btnUpdate = document.createElement('button');
+			btnUpdate.className = 'btn btn-success';
+			btnUpdate.onclick = () => handleUpdateButton(data.idEmpresa);
+			btnUpdate.innerHTML = 'Alterar';
+			btnGroup.appendChild(btnUpdate);
+
+			const btnDelete = document.createElement('button');
+			btnDelete.className = 'btn btn-danger';
+			btnDelete.onclick = () => handleDeleteButton(data.idEmpresa);
+			btnDelete.innerHTML = 'Remover';
+			btnGroup.appendChild(btnDelete);
+			
+			td.appendChild(btnGroup);
+			row.appendChild(td);
+
+			document.getElementById('companyBody').appendChild(row);
+		}
+	}
+
+	async function handleUpdateButton(id_empresa) {
+		const row = document.getElementById(`row:${id_empresa}`);
+
+		const data = {
+			cnpj: prompt('Informe o cnpj', row.children[1].innerHTML),
+			razaoSocial: prompt('Informe a razao social', row.children[2].innerHTML),
+			nomeFantasia: prompt('Informe o nome fantasia', row.children[3].innerHTML),
+			site: prompt('Informe o site', row.children[4].innerHTML),
+			email: prompt('Informe o email', row.children[5].innerHTML)
+		};
+
+		const response = await fetch(`/companies/${id_empresa}`, { 
 			method: 'PUT',
-			body: JSON.stringify({
-				cnpj: '09876543210987',//prompt('Informe o cnpj'),
-				razaoSocial: 'MINIMO EIRELLI', //prompt('Informe a razao social'),
-				nomeFantasia: 'Minimo Serviços',//prompt('Informe o nome fantasia'),
-				site: 'www.minimo.com.br', //prompt('Informe o site'),
-				email: 'empresa.minimo@gmail.com', //prompt('Informe o email'),
-			}),
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+    	},
+			body: JSON.stringify(data),
 		});
 
 		if (response.status === 400) {
 			alert('Ocorreu um erro');
 		} else {
 			alert('Sucesso!');
+
+			row.children[1].innerHTML = data.cnpj;
+			row.children[2].innerHTML = data.razaoSocial;
+			row.children[3].innerHTML = data.nomeFantasia;
+			row.children[4].innerHTML = data.site;
+			row.children[5].innerHTML = data.email;
 		}
 	}
 
-	function handleDeleteButton(id_empresa) {
+	async function handleDeleteButton(id_empresa) {
 		if (!confirm('Tem certeza disso?')) {
 			return;
 		}
 
-		const response = fetch(`/companies/${id_empresa}`, { method: 'DELETE' });
-		if (response.status === 400) {
+		const response = await fetch(`/companies/${id_empresa}`, { method: 'DELETE' });
+		if (response.status !== 204) {
 			alert('Ocorreu um erro');
 		} else {
 			alert('Sucesso!');
@@ -43,7 +122,15 @@
 	}
 </script>
 
+<br>
 <h1 style="text-align: center;">Empresas</h1>
+<br>
+
+<div style="width: 100%; text-align: right">
+	<button onclick="handleRegistrationButton()" class="btn btn-primary">Adicionar</button>
+</div>
+
+<br>
 
 <table class="table">
   <thead>
@@ -57,7 +144,7 @@
 			<th scope="col">Funções</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="companyBody">
 		{{#each companies}}
 			<tr id="row:{{this.idEmpresa}}">
 				<th scope="row">{{this.idEmpresa}}</th>
@@ -68,7 +155,7 @@
 				<td>{{this.email}}</td>
 				<td>
 					<div class="btn-group">
-						<span>{{this.updateButton}}</span>
+						<!-- <span>{{this.updateButton}}</span> -->
 						<button onclick="handleUpdateButton({{this.idEmpresa}})" class="btn btn-success">Alterar</button>
 						&nbsp;
 						<button onclick="handleDeleteButton({{this.idEmpresa}})" class="btn btn-danger">Remover</button>

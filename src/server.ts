@@ -9,12 +9,12 @@ import database from './database';
 
 const server = express();
 
+server.use(express.json());
 server.use(cors());
 server.engine('hbs', exphbs({ defaultLayout: 'default', extname: '.hbs' }));
 server.set('views', resolve(__dirname, 'views'));
 server.set('view engine', 'hbs');
 
-server.use(express.json());
 server.use(routes);
 
 database.connect().then(() => {

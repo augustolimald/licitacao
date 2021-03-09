@@ -1,0 +1,20 @@
+<br>
+<h1 style="text-align: center;">Contratos</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Num Contrato</th>
+      <th scope="col">CNPJ</th>
+    </tr>
+  </thead>
+  <tbody id="contractsBody">
+		{{#each contracts}}
+			<tr id="row:{{this.idContrato}}">
+				<th scope="row">{{this.idEmpresa}}</th>
+				<td>{{this.cnpj}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>
