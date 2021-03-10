@@ -5,15 +5,23 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Num Contrato</th>
-      <th scope="col">CNPJ</th>
+      <th scope="col">No Contrato</th>
+      <th scope="col">No Empresa</th>
+      <th scope="col">No Equipe de Supervisao</th>
+      <th scope="col">No Pregão</th>
+      <th scope="col">Data Assinatura</th>
+      <th scope="col">Data Vigência Fim</th>
     </tr>
   </thead>
   <tbody id="contractsBody">
 		{{#each contracts}}
 			<tr id="row:{{this.idContrato}}">
-				<th scope="row">{{this.idEmpresa}}</th>
-				<td>{{this.cnpj}}</td>
+				<th scope="row">{{this.idContrato}}</th>
+				<td>{{this.idEmpresa}}</td>
+        <td>{{this.idEquipeSupervisao}}</td>
+        <td>{{this.numPregao}}</td>
+        <td>{{this.dataAssinatura}}</td>
+        <td>{{this.dataFim}}</td>
 			</tr>
 		{{/each }}
   </tbody>

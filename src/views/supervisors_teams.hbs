@@ -1,0 +1,20 @@
+<br>
+<h1 style="text-align: center;">Supervisores de Cada Equipe</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Equipe de Supervisão</th>
+      <th scope="col">No Supervisor</th>
+    </tr>
+  </thead>
+  <tbody id="supervisoryteamsBody">
+		{{#each supervisors_teams}}
+			<tr id="row:{{this.idEquipeSupervisao}}">
+				<th scope="row">{{this.idEquipeSupervisao}}</th>
+				<td>{{this.idSupervisor}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>

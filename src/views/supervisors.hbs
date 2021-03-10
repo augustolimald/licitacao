@@ -1,0 +1,24 @@
+<br>
+<h1 style="text-align: center;">Supervisores</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Supervisor</th>
+      <th scope="col">CPF</th>
+      <th scope="col">Nome</th>
+      <th scope="col">E-mail</th>
+    </tr>
+  </thead>
+  <tbody id="supervisorsBody">
+		{{#each supervisors}}
+			<tr id="row:{{this.idSupervisor}}">
+				<th scope="row">{{this.idSupervisor}}</th>
+				<td>{{this.cpf}}</td>
+				<td>{{this.nome}}</td>
+				<td>{{this.email}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>

@@ -1,0 +1,34 @@
+<br>
+<h1 style="text-align: center;">Cobranças</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Cobrança</th>
+      <th scope="col">No Equipe de Supervisao</th>
+      <th scope="col">Unidade de Medida</th>    
+      <th scope="col">Quantidade</th>      
+      <th scope="col">Valor Unitário</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Data de Vencimento</th>
+      <th scope="col">Data de Disponibilização</th>
+      <th scope="col">Data de Pagamento</th>
+    </tr>
+  </thead>
+  <tbody id="billingsBody">
+		{{#each billings}}
+			<tr id="row:{{this.idCobranca}}">
+				<th scope="row">{{this.idCobranca}}</th>
+				<td>{{this.idEquipeSupervisao}}</td>
+                <td>{{this.unidadeMedida}}</td>
+                <td>{{this.quantidade}}</td>
+                <td>{{this.valorUnitario}}</td>
+                <td>{{this.descricao}}</td>
+                <td>{{this.dataVencimento}}</td>
+                <td>{{this.dataDisponibilizado}}</td>
+                <td>{{this.dataPagamento}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>

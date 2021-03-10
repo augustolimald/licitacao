@@ -1,0 +1,20 @@
+<br>
+<h1 style="text-align: center;">Equipe de Supervisão</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Equipe de Supervisão</th>
+      <th scope="col">Atribuição</th>
+    </tr>
+  </thead>
+  <tbody id="supervisoryteamsBody">
+		{{#each supervisoryteams}}
+			<tr id="row:{{this.idEquipeSupervisao}}">
+          <th scope="row">{{this.idEquipeSupervisao}}</th>
+          <td>{{this.atribuicao}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>

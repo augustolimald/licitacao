@@ -1,0 +1,34 @@
+<br>
+<h1 style="text-align: center;">Endereço das Empresas</h1>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No Endereço</th>
+      <th scope="col">No Empresa</th>
+      <th scope="col">Logradouro</th>
+      <th scope="col">CEP</th>
+      <th scope="col">Bairro</th>
+      <th scope="col">Complemento</th>
+      <th scope="col">Cidade</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Número</th>
+    </tr>
+  </thead>
+  <tbody id="addressesBody">
+		{{#each addresses}}
+			<tr id="row:{{this.idEndereco}}">
+				<th scope="row">{{this.idEndereco}}</th>
+				<td>{{this.idEmpresa}}</td>
+                <td>{{this.logradouro}}</td>
+                <td>{{this.cep}}</td>
+                <td>{{this.bairro}}</td>
+                <td>{{this.complemento}}</td>
+                <td>{{this.cidade}}</td>
+                <td>{{this.estado}}</td>
+                <td>{{this.num}}</td>
+			</tr>
+		{{/each }}
+  </tbody>
+</table>
