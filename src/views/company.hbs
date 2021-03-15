@@ -1,11 +1,11 @@
 <script>
 	async function handleRegistrationButton() {
 		const data = {
-			cnpj: '34732843284783',//prompt('Informe o cnpj'),
-			razaoSocial: 'Sou uma razao social', //prompt('Informe a razao social'),
-			nomeFantasia: 'Sou um nome', //prompt('Informe o nome fantasia'),
-			site: 'www.souumsite.com.br', //prompt('Informe o site'),
-			email: 'souumemail@mail.com' //prompt('Informe o email')
+			cnpj: prompt('Informe o cnpj'),
+			razaoSocial: prompt('Informe a razao social'),
+			nomeFantasia: prompt('Informe o nome fantasia'),
+			site: prompt('Informe o site'),
+			email: prompt('Informe o email')
 		};
 
 		const response = await fetch(`/companies`, { 
